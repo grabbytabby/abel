@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+import matplotlib.pyplot as plt
 
 # Set page config
 st.set_page_config(page_title="ABEL", page_icon="🏢", layout="wide")
@@ -92,11 +92,17 @@ if selected == "Database":
 if selected == "Analytics":
     st.header("Analytics")
     if not st.session_state.data.empty:
-        fig1 = px.pie(st.session_state.data, names='Profession', title='Distribution of Professions')
-        st.plotly_chart(fig1)
+        # Distribution of Professions
+        fig1, ax1 = plt.subplots()
+        st.session_state.data['Profession'].value_counts().plot.pie(autopct='%1.1f%%', ax=ax1)
+        ax1.set_title('Distribution of Professions')
+        st.pyplot(fig1)
         
-        fig2 = px.histogram(st.session_state.data, x='Rating', title='Distribution of Ratings')
-        st.plotly_chart(fig2)
+        # Distribution of Ratings
+        fig2, ax2 = plt.subplots()
+        st.session_state.data['Rating'].plot.hist(ax=ax2, bins=5)
+        ax2.set_title('Distribution of Ratings')
+        st.pyplot(fig2)
     else:
         st.info("No data available for analytics. Please add some entries.")
 
